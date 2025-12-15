@@ -1,27 +1,28 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { chatboat } from "./chatboat.js";
 
 const app = express();
 const PORT = 3000;
 
-// ✅ REQUIRED
-app.set("view engine", "ejs");
+// ✅ Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// ✅ Correct folders
-app.set("views", "./views");
-app.use(express.static("public"));
+// ✅ MUST be absolute paths
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
 
-// ✅ Home
+// Home
 app.get("/", (req, res) => {
-  res.render("index", {
-    title: "Home Page",
-    message: "Welcome to EJS in Node.js!",
-  });
+  res.render("index");
 });
 
-// ✅ Chat API
+// Chat API
 app.post("/Chat", async (req, res) => {
   try {
     const { message, threadId } = req.body;
@@ -32,12 +33,12 @@ app.post("/Chat", async (req, res) => {
 
     const Response = await chatboat(message, threadId);
     res.json({ Response });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server Started On Port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
