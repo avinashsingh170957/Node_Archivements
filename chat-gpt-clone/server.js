@@ -3,12 +3,8 @@ import { chatboat } from "./chatboat.js";
 import cors from 'cors'
 const app = express();
 const PORT = 3000;
-const options = {
-    origin: 'https://node-archivements.vercel.app'
-}
-app.use(cors(
-options
-));
+
+app.use(cors());
 app.use(express.json())
 app.get("/", (req, res) => {
 
