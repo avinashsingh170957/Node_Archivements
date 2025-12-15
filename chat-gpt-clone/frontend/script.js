@@ -31,8 +31,9 @@ async function callserver(inputText) {
     }
    const threadId =  Date.now().toString(36) + Math.random().toString(36).substring(2,8);
 
+   
      try {
-    const response = await fetch('/Chat', {
+    const response = await fetch('/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
